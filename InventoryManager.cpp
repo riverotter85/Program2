@@ -1,44 +1,48 @@
+/*
+	Filename: InventoryManager.cpp
+	Written and Modified By: Logan Davis
+	Last Date Modififed: 10/07/2016
+*/
+
 #include "InventoryManager.h"
 
 #include "QueueDeque.h"
 #include "StackDeque.h"
-
 #include "Widget.h"
 
 InventoryManager::InventoryManager(int inv_choice)
 {
-	if (inv_choice != 0 || inv_choice != 1)
+	if (inv_choice != 1 && inv_choice != 2)
 	{
-		inv_choice = 0; // Use FIFO management by default
+		inv_choice = 1; // Use LIFO management by default
 	}
 	
 	inventory_choice = inv_choice;
+	profit = 0.0;
 	
-	if (inventory_choice == 0)
+	if (inventory_choice == 1)
 	{
-		qd = new QueueDeque<Widget>();
-		sd = NULL;
+		sd = new StackDeque<Widget>();
 	}
 	else
 	{
-		sd = new StackDeque<Widget>();
-		qd = NULL;
+		qd = new QueueDeque<Widget>();
 	}
 }
 
 InventoryManager::~InventoryManager()
 {
-	if (inventory_choice == 0)
-	{
-		delete qd;
-	}
-	else
+	if (inventory_choice == 1)
 	{
 		delete sd;
 	}
+	else
+	{
+		delete qd;
+	}
 }
 
-void InventoryManager::buyWidgets(float cost, int num_to_buy)
+void InventoryManager::buyWidgets(double cost, int num_to_buy)
 {
 	if (num_to_buy < 1)
 	{
@@ -49,66 +53,51 @@ void InventoryManager::buyWidgets(float cost, int num_to_buy)
 	{
 		Widget* item = new Widget(cost);
 		
-		if (inventory_choice == 0)
-		{
-			qd->enqueue(item);
-		}
-		else
+		if (inventory_choice == 1)
 		{
 			sd->push(item);
 		}
+		else
+		{
+			qd->enqueue(item);
+		}
 	}
 }
 
-// NOTE: Complete code later
-float InventoryManager::getTotalProfit()
+double InventoryManager::getTotalProfit()
 {
-	if (inventory_choice == 0)
+	return profit;
+}
+
+double InventoryManager::sellWidgets(double price, int num_to_sell)
+{
+	if (num_to_sell >= 1) // Only modify profit if there are items to sell
 	{
-		while (qd->size() != 0)
+		if (inventory_choice == 1)
 		{
+			if (num_to_sell > sd->size())
+			{
+				num_to_sell = sd->size(); // Can only sell as many items that are in the list
+			}
 			
+			for (int i = 0; i < num_to_sell; i++)
+			{
+				Widget* item = sd->pop();
+				profit = profit + (price - item->getCost());
+			}
 		}
-	}
-	else
-	{
-		
-	}
-}
-
-float InventoryManager::sellWidgets(float price, int num_to_sell)
-{
-	if (num_to_sell < 1)
-	{
-		return 0.0; // Nothing to sell
-	}
-	
-	float profit = 0.0;
-	
-	if (inventory_choice == 0)
-	{
-		if (num_to_sell > qd->size())
+		else
 		{
-			num_to_sell = qd->size(); // Can only sell as many items that are in the list
-		}
-		
-		for (int i = 0; i < num_to_sell; i++)
-		{
-			Widget* item = qd->pop();
-			profit = profit + (price - item->getCost());
-		}
-	}
-	else
-	{
-		if (num_to_sell > sd->size())
-		{
-			num_to_sell = sd->size(); // Can only sell as many items that are in the list
-		}
-		
-		for (int i = 0; i < num_to_sell; i++)
-		{
-			Widget* item = sd->pop();
-			profit = profit + (price - item->getCost());
+			if (num_to_sell > qd->size())
+			{
+				num_to_sell = qd->size(); // Can only sell as many items that are in the list
+			}
+			
+			for (int i = 0; i < num_to_sell; i++)
+			{
+				Widget* item = qd->dequeue();
+				profit = profit + (price - item->getCost());
+			}
 		}
 	}
 	

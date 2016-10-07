@@ -1,3 +1,9 @@
+/*
+	Filename: QueueDeque.h
+	Written and Modified By: Logan Davis
+	Last Date Modified: 10/07/2016
+*/
+
 #if !defined _QUEUE_DEQUE_H
 #define _QUEUE_DEQUE_H
 

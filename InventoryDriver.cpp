@@ -1,3 +1,9 @@
+/*
+	Filename: InventoryDriver.cpp
+	Modified By: Logan Davis
+	Last Date Modified: 10/07/2016
+*/
+
 #include "InventoryManager.h"
 #include "Text.h"
 using CSC2110::String;
@@ -19,28 +25,23 @@ int inventoryChoice()
 //buy Widgets (check invalid input and reprompt if necessary)
 void buyWidgets(InventoryManager* im)
 {
-
-
-
-
-
-
-
-
+	Keyboard* kb = Keyboard::getKeyboard();
+	int num_widgets = kb->getValidatedInt("How many widgets do you wish to buy? ", 1, 100);
+	double widget_cost = kb->getValidatedDouble("What is the cost for each widget? ", 0.01, 1000.0);
+	
+	im->buyWidgets(widget_cost, num_widgets);
 }
 
 //DO THIS
 //sell Widgets and return the profit (check invalid input and reprompt if necessary)
 double sellWidgets(InventoryManager* im)
 {
-
-
-
-
-
-
-
-
+	Keyboard* kb = Keyboard::getKeyboard();
+	int num_widgets = kb->getValidatedInt("How many widgets do you wish to sell? ", 1, 100);
+	double widget_price = kb->getValidatedDouble("What is the selling price for each widget? ", 0.01, 1000.0);
+	
+	double profit = im->sellWidgets(widget_price, num_widgets);
+	return profit;
 }
 
 bool mainMenu(InventoryManager* im)

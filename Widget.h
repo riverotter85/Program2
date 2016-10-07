@@ -1,17 +1,23 @@
+/*
+	Filename: Widget.h
+	Written and Modified By: Logan Davis
+	Last Date Modified: 10/07/2016
+*/
+
 #if !defined _WIDGET_H
 #define _WIDGET_H
 
 class Widget
 {
 	private:
-		float cost;
+		double cost;
 	
 	public:
-		Widget(float cst);
+		Widget(double cst);
 		~Widget();
 		
-		void setCost(float cst);
-		float getCost();
+		void setCost(double cst);
+		double getCost();
 };
 
 #endif

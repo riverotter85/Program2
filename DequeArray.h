@@ -1,3 +1,9 @@
+/*
+	Filename: DequeArray.h
+	Written and Modified By: Logan Davis
+	Last Date Modified: 10/07/2016
+*/
+
 #if !defined NULL
 #define NULL 0
 #endif
@@ -19,7 +25,6 @@ class DequeArray
 	
 	public:
 		DequeArray();
-		DequeArray(T** itms, int size);
 		~DequeArray();
 		
 		bool isEmpty();
@@ -36,25 +41,11 @@ class DequeArray
 template < class T >
 DequeArray<T>::DequeArray()
 {
-	int max = 2;
-	T** new_items = new T*[max];
-	for (int i = 0; i < max; i++)
-	{
-		new_items[i] = NULL;
-	}
-	
-	DequeArray(new_items, max);
-}
-
-template < class T >
-DequeArray<T>::DequeArray(T** itms, int size)
-{
-	max_queue = size;
-	items = itms;
-	sz = 0;
-	
-	front = 0;
-	back = max_queue - 1;
+    max_queue = 2;
+    items = new T*[max_queue];  
+    front = 0;
+    back = max_queue - 1;
+    sz = 0;
 }
 
 template < class T >
@@ -107,7 +98,7 @@ T* DequeArray<T>::peek()
 
 template < class T >
 void DequeArray<T>::enqueue(T* item)
-{
+{	
 	if (item == NULL)
 	{
 		return;
